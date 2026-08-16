@@ -1,0 +1,84 @@
+/* ConfessionCard — ITLA Crush
+   Estilos construidos exclusivamente con tokens del design system.
+   No sobreescribe ninguna regla global. */
+
+/* ── Card wrapper ──
+   El base (.card, .card-paper) ya viene del sistema de diseño global.
+   Solo añadimos el layout interno específico de la confesión. */
+.confession-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+/* ── Header ── */
+.confession-card-header {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-xs);
+}
+
+.confession-card-to-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-secondary);
+}
+
+.confession-card-to {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+/* ── Body ──
+   .notebook-lines ya está definido en index.css.
+   Solo configuramos el padding interno para que el texto
+   quede bien separado de los bordes de la tarjeta. */
+.confession-card-body {
+  border-radius: var(--radius-sm);
+  padding: var(--space-lg) var(--space-md);
+  min-height: calc(var(--notebook-line-height) * 4);
+}
+
+.confession-card-message {
+  font-size: 0.9375rem;
+  color: var(--color-text);
+  line-height: var(--notebook-line-height);
+  margin: 0;
+  white-space: pre-line;
+}
+
+/* ── Footer ── */
+.confession-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  padding-top: var(--space-sm);
+  border-top: 1px solid var(--color-border-soft);
+}
+
+.confession-card-from {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+}
+
+.confession-card-from strong {
+  color: var(--color-text);
+  font-weight: 600;
+}
+
+.confession-card-anonymous {
+  font-size: 0.875rem;
+  color: var(--color-accent);
+  font-weight: 500;
+}
+
+.confession-card-date {
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary);
+  white-space: nowrap;
+}

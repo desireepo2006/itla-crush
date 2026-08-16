@@ -1,0 +1,116 @@
+/* Layout — ITLA Crush */
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* ── Header ── */
+.layout-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background-color: var(--color-background);
+  border-bottom: 1px solid var(--color-border);
+  height: var(--header-height);
+}
+
+.layout-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.layout-logo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  text-decoration: none;
+  color: var(--color-text);
+}
+
+.layout-logo:hover {
+  color: var(--color-text);
+}
+
+.layout-logo-heart {
+  font-size: 1.25rem;
+  line-height: 1;
+}
+
+.layout-logo-text {
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.layout-logo-crush {
+  color: var(--color-accent);
+}
+
+/* ── Main ── */
+.layout-main {
+  flex: 1;
+}
+
+/* ── Footer ── */
+.layout-footer {
+  border-top: 1px solid var(--color-border-soft);
+  padding: var(--space-lg) 0;
+}
+
+.layout-footer-inner {
+  text-align: center;
+}
+
+.layout-footer p {
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+/* ── Status Indicator for Develop ── */
+.layout-status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-sm);
+  justify-content: center;
+  margin-bottom: var(--space-sm);
+  font-weight: 500;
+}
+
+.status-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--color-success);
+  display: inline-block;
+  box-shadow: 0 0 8px var(--color-success);
+  animation: statusPulse 1.5s infinite alternate;
+}
+
+@keyframes statusPulse {
+  from { opacity: 0.4; }
+  to { opacity: 1; }
+}
+
+/* ── Navigation ── */
+.layout-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.layout-nav-link {
+  font-size: 0.9375rem;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.layout-nav-link:hover {
+  color: var(--color-text);
+}

@@ -12,8 +12,20 @@ export function Home() {
     <div className="home">
       {/* ── Hero ── */}
       <section className="home-hero">
-        <div className="container">
-          <span className="home-hero-icon" aria-hidden="true">💌</span>
+        {/* Fondo de video — nítido, sin blur */}
+        <video
+          className="home-hero-video"
+          src="/assets/hero-video.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+        />
+        {/* Overlay sutil para dar contraste al texto sin desenfoque */}
+        <div className="home-hero-overlay" aria-hidden="true" />
+
+        {/* Contenido sobre el video */}
+        <div className="home-hero-content container">
           <h1 className="home-hero-title">
             Donde los crushes{' '}
             <span className="home-hero-highlight">dejan de ser secretos.</span>

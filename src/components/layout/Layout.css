@@ -114,3 +114,26 @@
 .layout-nav-link:hover {
   color: var(--color-text);
 }
+
+/* ── Header CTA — Link destacado ── */
+.layout-nav-cta {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text-inverse);
+  background-color: var(--color-accent);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-md);
+  padding: 0.3125rem 0.875rem;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color var(--transition-fast),
+              transform var(--transition-fast);
+}
+
+.layout-nav-cta:hover {
+  background-color: var(--color-accent-soft);
+  color: var(--color-text-inverse);
+  transform: translateY(-1px);
+}

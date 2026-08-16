@@ -4,6 +4,7 @@
  * Base layout wrapper with header and footer.
  * Flat design, thin black borders, ITLA branding.
  */
+import { Link } from 'react-router-dom'
 import './Layout.css'
 
 export function Layout({ children }) {
@@ -11,13 +12,16 @@ export function Layout({ children }) {
     <div className="layout">
       <header className="layout-header">
         <div className="container layout-header-inner">
-          <a href="/" className="layout-logo" aria-label="ITLA Crush — Inicio">
+          <Link to="/" className="layout-logo" aria-label="ITLA Crush — Inicio">
             <span className="layout-logo-heart" aria-hidden="true">❤️</span>
             <span className="layout-logo-text">
               ITLA <span className="layout-logo-crush">Crush</span>
             </span>
-          </a>
-          <span className="badge badge-primary">MVP Setup</span>
+          </Link>
+          <nav className="layout-nav">
+            <Link to="/feed" className="layout-nav-link">Feed 💌</Link>
+            <span className="badge badge-primary">MVP Setup</span>
+          </nav>
         </div>
       </header>
 

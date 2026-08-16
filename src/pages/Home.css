@@ -4,18 +4,44 @@
   padding-bottom: var(--space-3xl);
 }
 
-/* ── Hero ── */
+/* ── Hero — Video Background ── */
 .home-hero {
-  padding: var(--space-3xl) 0;
+  position: relative;
+  overflow: hidden;
+  z-index: 0;
   text-align: center;
   border-bottom: 1px solid var(--color-border-soft);
-  background-color: var(--color-paper);
+  /* Fallback background mientras el video carga */
+  background-color: #0a0a1a;
 }
 
-.home-hero-icon {
-  font-size: 2.5rem;
+/* Video de fondo — nítido, cubriendo todo el hero */
+.home-hero-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -2;
+  /* Anula el display:block del reset global para que no empuje el layout */
   display: block;
-  margin-bottom: var(--space-md);
+}
+
+/* Overlay sutil — sin blur, solo una capa de oscurecimiento ligero */
+.home-hero-overlay {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.35);
+  z-index: -1;
+}
+
+/* Wrapper del contenido — siempre por encima del video y el overlay */
+.home-hero-content {
+  position: relative;
+  z-index: 1;
+  padding-top: var(--space-3xl);
+  padding-bottom: var(--space-3xl);
 }
 
 .home-hero-title {
@@ -27,15 +53,20 @@
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
+  /* Texto sobre video: blanco con sombra elegante para legibilidad */
+  color: #ffffff;
+  text-shadow: 0px 2px 12px rgba(0, 0, 0, 0.55);
 }
 
 .home-hero-highlight {
-  color: var(--color-accent);
+  color: #ff8fa3;
 }
 
 .home-hero-subtitle {
   font-size: 1.125rem;
-  color: var(--color-text-secondary);
+  /* Subtítulo claro sobre fondo oscuro */
+  color: rgba(255, 255, 255, 0.85);
+  text-shadow: 0px 1px 8px rgba(0, 0, 0, 0.45);
   max-width: 440px;
   margin-left: auto;
   margin-right: auto;
@@ -50,8 +81,9 @@
 }
 
 @media (max-width: 640px) {
-  .home-hero {
-    padding: var(--space-2xl) 0;
+  .home-hero-content {
+    padding-top: var(--space-2xl);
+    padding-bottom: var(--space-2xl);
   }
 
   .home-hero-title {

@@ -8,6 +8,7 @@
  */
 import {
   createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
 } from 'firebase/auth'
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore'
 import { auth, db } from '../config/firebase'
@@ -31,6 +32,12 @@ function translateFirebaseError(code) {
       'Demasiados intentos fallidos. Espera un momento antes de volver a intentarlo.',
     'auth/operation-not-allowed':
       'El registro por correo no está habilitado. Contacta al administrador.',
+    'auth/invalid-credential':
+      'Credenciales incorrectas. Verifica tu correo y contraseña.',
+    'auth/user-not-found':
+      'Usuario no encontrado. Revisa el correo ingresado.',
+    'auth/wrong-password':
+      'La contraseña es incorrecta.',
   }
   return messages[code] ?? 'Ocurrió un error inesperado. Inténtalo de nuevo.'
 }
@@ -59,6 +66,21 @@ export async function registerUser({ firstName, lastName, username, email, passw
     })
 
     return { success: true }
+  } catch (err) {
+    return { success: false, error: translateFirebaseError(err.code) }
+  }
+}
+
+/**
+ * Inicia sesión de un usuario existente con correo y contraseña.
+ *
+ * @param {{ email: string, password: string }} data
+ * @returns {Promise<{ success: boolean, user?: object, error?: string }>}
+ */
+export async function loginUser({ email, password }) {
+  try {
+    const credential = await signInWithEmailAndPassword(auth, email, password)
+    return { success: true, user: credential.user }
   } catch (err) {
     return { success: false, error: translateFirebaseError(err.code) }
   }

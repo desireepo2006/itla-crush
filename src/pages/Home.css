@@ -1,0 +1,203 @@
+/* Home — Design System Demo */
+
+.home {
+  padding-bottom: var(--space-3xl);
+}
+
+/* ── Hero ── */
+.home-hero {
+  padding: var(--space-3xl) 0;
+  text-align: center;
+  border-bottom: 1px solid var(--color-border-soft);
+  background-color: var(--color-paper);
+}
+
+.home-hero-icon {
+  font-size: 2.5rem;
+  display: block;
+  margin-bottom: var(--space-md);
+}
+
+.home-hero-title {
+  font-size: 3rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  margin-bottom: var(--space-md);
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.home-hero-highlight {
+  color: var(--color-accent);
+}
+
+.home-hero-subtitle {
+  font-size: 1.125rem;
+  color: var(--color-text-secondary);
+  max-width: 440px;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: var(--space-xl);
+}
+
+.home-hero-actions {
+  display: flex;
+  gap: var(--space-sm);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 640px) {
+  .home-hero {
+    padding: var(--space-2xl) 0;
+  }
+
+  .home-hero-title {
+    font-size: 2rem;
+  }
+
+  .home-hero-subtitle {
+    font-size: 1rem;
+  }
+}
+
+/* ── Section Headers ── */
+.home-section-header {
+  margin-bottom: var(--space-xl);
+}
+
+.home-section-header .badge {
+  margin-bottom: var(--space-sm);
+}
+
+.home-section-header h2 {
+  margin-top: var(--space-sm);
+}
+
+/* ── Bento Section ── */
+.home-bento-section {
+  padding-top: var(--space-2xl);
+}
+
+/* ── Paper Preview ── */
+.home-paper-preview {
+  margin-top: var(--space-md);
+  padding: var(--space-lg);
+  border: 1px solid var(--color-border-soft);
+  border-radius: var(--radius-md);
+  background-color: var(--color-background);
+  min-height: 80px;
+}
+
+.home-paper-text {
+  font-style: italic;
+  color: var(--color-text);
+  margin: 0;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Note Card Content ── */
+.home-note-content {
+  position: relative;
+  z-index: 1;
+}
+
+.home-note-label {
+  display: block;
+  font-weight: 600;
+  color: var(--color-primary);
+  margin-bottom: 0;
+  text-transform: uppercase;
+  font-size: 0.6875rem;
+  letter-spacing: 0.05em;
+  /* Make it take exactly one line height to preserve the grid */
+  line-height: var(--notebook-line-height, 32px);
+}
+
+.home-note-text {
+  color: var(--color-text);
+}
+
+/* ── Love Alarm Card ── */
+.home-alarm-header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+
+.home-alarm-icon {
+  font-size: 1.25rem;
+}
+
+/* ── Stats ── */
+.home-stats {
+  display: flex;
+  gap: var(--space-lg);
+  margin-top: var(--space-md);
+}
+
+.home-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.home-stat-number {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.home-stat-label {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-weight: 500;
+}
+
+/* ── Buttons Demo ── */
+.home-buttons-section {
+  padding-top: var(--space-2xl);
+}
+
+.home-buttons-demo {
+  display: flex;
+  gap: var(--space-sm);
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* ── Roadmap Card Styles (Merged from develop) ── */
+.home-roadmap-title {
+  margin-top: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+
+.home-roadmap-description {
+  font-size: 0.9rem;
+  margin-bottom: var(--space-md);
+}
+
+.home-roadmap-subtitle {
+  font-size: 0.9rem;
+  margin-bottom: var(--space-sm);
+  font-weight: 700;
+  color: var(--color-text);
+}
+
+.home-roadmap-list {
+  padding-left: var(--space-lg);
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+  list-style: disc;
+}
+

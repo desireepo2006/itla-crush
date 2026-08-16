@@ -20,6 +20,7 @@ export function Layout({ children }) {
           </Link>
           <nav className="layout-nav">
             <Link to="/feed" className="layout-nav-link">Feed 💌</Link>
+            <Link to="/registro" className="layout-nav-link">Registrarse</Link>
             <Link to="/nueva" className="layout-nav-cta">
               + Confesión
             </Link>

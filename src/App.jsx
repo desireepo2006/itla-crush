@@ -4,6 +4,7 @@ import { Home } from './pages/Home'
 import { Feed } from './pages/Feed'
 import { NewConfession } from './pages/NewConfession'
 import { Register } from './pages/Register'
+import { Login } from './pages/Login'
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route path="/feed" element={<Feed />} />
           <Route path="/nueva" element={<NewConfession />} />
           <Route path="/registro" element={<Register />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
       </Layout>
     </BrowserRouter>

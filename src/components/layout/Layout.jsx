@@ -5,9 +5,11 @@
  * Flat design, thin black borders, ITLA branding.
  */
 import { Link } from 'react-router-dom'
+import { useAuth } from '../../context/AuthContext'
 import './Layout.css'
 
 export function Layout({ children }) {
+  const { user, userData, logout } = useAuth()
   return (
     <div className="layout">
       <header className="layout-header">
@@ -20,8 +22,27 @@ export function Layout({ children }) {
           </Link>
           <nav className="layout-nav">
             <Link to="/feed" className="layout-nav-link">Feed 💌</Link>
-            <Link to="/login" className="layout-nav-link">Iniciar Sesión</Link>
-            <Link to="/registro" className="layout-nav-link">Registrarse</Link>
+            
+            {user ? (
+              <>
+                <span className="layout-nav-link" style={{ fontWeight: '600', color: 'var(--color-primary)' }}>
+                  Hola, {userData?.firstName || 'Usuario'}
+                </span>
+                <button 
+                  onClick={logout} 
+                  className="layout-nav-link" 
+                  style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 'inherit', fontFamily: 'inherit' }}
+                >
+                  Cerrar Sesión
+                </button>
+              </>
+            ) : (
+              <>
+                <Link to="/login" className="layout-nav-link">Iniciar Sesión</Link>
+                <Link to="/registro" className="layout-nav-link">Registrarse</Link>
+              </>
+            )}
+
             <Link to="/nueva" className="layout-nav-cta">
               + Confesión
             </Link>

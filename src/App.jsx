@@ -5,6 +5,7 @@ import { Feed } from './pages/Feed'
 import { NewConfession } from './pages/NewConfession'
 import { Register } from './pages/Register'
 import { Login } from './pages/Login'
+import { Profile } from './pages/Profile'
 import { AuthProvider } from './context/AuthContext'
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
             <Route path="/nueva" element={<NewConfession />} />
             <Route path="/registro" element={<Register />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/perfil" element={<Profile />} />
           </Routes>
         </Layout>
       </BrowserRouter>

@@ -25,9 +25,9 @@ export function Layout({ children }) {
             
             {user ? (
               <>
-                <span className="layout-nav-link" style={{ fontWeight: '600', color: 'var(--color-primary)' }}>
+                <Link to="/perfil" className="layout-nav-link" style={{ fontWeight: '600', color: 'var(--color-primary)' }}>
                   Hola, {userData?.firstName || 'Usuario'}
-                </span>
+                </Link>
                 <button 
                   onClick={logout} 
                   className="layout-nav-link" 

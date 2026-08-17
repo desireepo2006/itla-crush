@@ -3,14 +3,14 @@
  *
  * Vista para crear una nueva confesión romántica.
  * Incluye selector visual de los 4 estilos de carta del sistema de diseño.
- *
- * Fase 4: cuando Firebase esté listo, el onSubmit enviará los datos a Firestore.
- * Por ahora hace console.log con los datos del formulario.
  */
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { collection, addDoc, getDocs, serverTimestamp } from 'firebase/firestore'
+import { db } from '../config/firebase'
+import { useAuth } from '../context/AuthContext'
 import './NewConfession.css'
 
-/** Los 4 estilos de carta definidos en el PROJECT_CONTEXT */
 const STYLES = [
   {
     id: 'notebook',
@@ -43,42 +43,119 @@ const STYLES = [
 ]
 
 const INITIAL_FORM = {
-  to: '',
+  toId: '',
+  customTo: '',
   message: '',
-  from: '',
   style: 'notebook',
+  isPublic: true,
+  isAnonymous: false,
 }
 
 export function NewConfession() {
+  const { user, userData } = useAuth()
+  const navigate = useNavigate()
+  
   const [form, setForm] = useState(INITIAL_FORM)
+  const [usersList, setUsersList] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [fetchingUsers, setFetchingUsers] = useState(true)
 
-  /** Actualiza un campo del formulario de forma genérica */
+  useEffect(() => {
+    async function fetchUsers() {
+      try {
+        const querySnapshot = await getDocs(collection(db, 'users'))
+        const users = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }))
+        setUsersList(users)
+      } catch (error) {
+        console.error("Error fetching users:", error)
+      } finally {
+        setFetchingUsers(false)
+      }
+    }
+    fetchUsers()
+  }, [])
+
   function handleChange(e) {
-    const { name, value } = e.target
-    setForm((prev) => ({ ...prev, [name]: value }))
+    const { name, value, type, checked } = e.target
+    setForm((prev) => ({ 
+      ...prev, 
+      [name]: type === 'checkbox' ? checked : value 
+    }))
   }
 
-  /** Selecciona el estilo de carta */
   function handleStyleChange(styleId) {
     setForm((prev) => ({ ...prev, style: styleId }))
   }
 
-  /** Envía el formulario — Firebase en Fase 4 */
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault()
-    console.log('Nueva confesión:', {
-      to: form.to,
-      message: form.message,
-      from: form.from || null,
-      style: form.style,
-    })
+    
+    if (!form.toId || !form.message.trim()) {
+      alert("Por favor completa los campos obligatorios.")
+      return
+    }
+
+    if (form.toId === 'OTRO' && !form.customTo.trim()) {
+      alert("Por favor escribe el nombre del destinatario.")
+      return
+    }
+    
+    if (!user) {
+      alert("Debes iniciar sesión para publicar una confesión.")
+      return
+    }
+
+    setLoading(true)
+    
+    try {
+      let recipientName = ''
+      if (form.toId === 'OTRO') {
+        recipientName = form.customTo.trim()
+      } else {
+        const selectedUser = usersList.find(u => u.id === form.toId)
+        recipientName = selectedUser ? (selectedUser.username || selectedUser.firstName) : 'Desconocido'
+      }
+
+      await addDoc(collection(db, 'declarations'), {
+        authorId: user.uid,
+        recipientId: form.toId === 'OTRO' ? null : form.toId,
+        recipientName,
+        isPublic: form.isPublic,
+        isAnonymous: form.isAnonymous,
+        body: form.message,
+        font: 'default',
+        backgroundStyle: form.style,
+        createdAt: serverTimestamp()
+      })
+
+      alert("¡Confesión enviada con éxito! ❤️")
+      navigate('/')
+    } catch (error) {
+      console.error("Error saving declaration:", error)
+      alert("Hubo un error al enviar tu confesión. Inténtalo de nuevo.")
+    } finally {
+      setLoading(false)
+    }
   }
 
   const selectedStyle = STYLES.find((s) => s.id === form.style)
+  
+  // Para la vista previa
+  let previewTo = 'alguien especial...'
+  if (form.toId) {
+    if (form.toId === 'OTRO') {
+      previewTo = form.customTo || 'alguien especial...'
+    } else {
+      const su = usersList.find(u => u.id === form.toId)
+      previewTo = su ? (su.username || su.firstName) : 'alguien especial...'
+    }
+  }
 
   return (
     <div className="nc">
-      {/* ── Hero ── */}
       <section className="nc-hero">
         <div className="container">
           <span className="badge badge-accent">💌 Nueva Confesión</span>
@@ -89,33 +166,55 @@ export function NewConfession() {
         </div>
       </section>
 
-      {/* ── Layout principal: formulario + preview ── */}
       <section className="nc-body">
         <div className="container">
           <div className="nc-layout">
-
-            {/* ── Columna izquierda: formulario ── */}
             <form className="nc-form" onSubmit={handleSubmit} noValidate>
-
-              {/* Para quién */}
+              
               <div className="nc-field">
                 <label htmlFor="nc-to" className="nc-label">
                   Para <span className="nc-label-required" aria-hidden="true">*</span>
                 </label>
-                <input
+                <select
                   id="nc-to"
-                  name="to"
-                  type="text"
+                  name="toId"
                   className="nc-input"
-                  placeholder="¿A quién va dirigida tu confesión?"
-                  value={form.to}
+                  value={form.toId}
                   onChange={handleChange}
                   required
-                  maxLength={100}
-                />
+                  disabled={fetchingUsers}
+                >
+                  <option value="" disabled>
+                    {fetchingUsers ? 'Cargando usuarios...' : '¿A quién va dirigida tu confesión?'}
+                  </option>
+                  {usersList.map((u) => (
+                    <option key={u.id} value={u.id}>
+                      {u.firstName} {u.lastName ? `${u.lastName} ` : ''}(@{u.username})
+                    </option>
+                  ))}
+                  <option value="OTRO">OTRO</option>
+                </select>
               </div>
 
-              {/* El mensaje */}
+              {form.toId === 'OTRO' && (
+                <div className="nc-field">
+                  <label htmlFor="nc-custom-to" className="nc-label">
+                    Nombre del destinatario <span className="nc-label-required" aria-hidden="true">*</span>
+                  </label>
+                  <input
+                    id="nc-custom-to"
+                    name="customTo"
+                    type="text"
+                    className="nc-input"
+                    placeholder="Escribe el nombre de tu crush..."
+                    value={form.customTo}
+                    onChange={handleChange}
+                    required
+                    maxLength={100}
+                  />
+                </div>
+              )}
+
               <div className="nc-field">
                 <label htmlFor="nc-message" className="nc-label">
                   Tu confesión <span className="nc-label-required" aria-hidden="true">*</span>
@@ -137,24 +236,30 @@ export function NewConfession() {
                 </span>
               </div>
 
-              {/* De quién (opcional) */}
-              <div className="nc-field">
-                <label htmlFor="nc-from" className="nc-label">
-                  De <span className="nc-label-optional">(opcional — déjalo vacío para ser anónimo/a)</span>
+              <div className="nc-field" style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                <span className="nc-label">Privacidad</span>
+                
+                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
+                  <input
+                    type="checkbox"
+                    name="isPublic"
+                    checked={form.isPublic}
+                    onChange={handleChange}
+                  />
+                  <span style={{ fontSize: '0.9rem', color: 'var(--color-text)' }}>Hacer declaración pública</span>
                 </label>
-                <input
-                  id="nc-from"
-                  name="from"
-                  type="text"
-                  className="nc-input"
-                  placeholder="Tu nombre o apodo..."
-                  value={form.from}
-                  onChange={handleChange}
-                  maxLength={80}
-                />
+
+                <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
+                  <input
+                    type="checkbox"
+                    name="isAnonymous"
+                    checked={form.isAnonymous}
+                    onChange={handleChange}
+                  />
+                  <span style={{ fontSize: '0.9rem', color: 'var(--color-text)' }}>Enviar de forma anónima</span>
+                </label>
               </div>
 
-              {/* ── Selector de estilo ── */}
               <fieldset className="nc-style-fieldset">
                 <legend className="nc-label">Presentación visual</legend>
                 <div className="nc-style-grid">
@@ -179,26 +284,24 @@ export function NewConfession() {
                 </div>
               </fieldset>
 
-              {/* Botón de envío */}
               <div className="nc-actions">
-                <button type="submit" className="btn btn-accent btn-lg nc-submit">
-                  Enviar confesión ❤️
+                <button type="submit" className="btn btn-accent btn-lg nc-submit" disabled={loading}>
+                  {loading ? 'Enviando...' : 'Enviar confesión ❤️'}
                 </button>
               </div>
             </form>
 
-            {/* ── Columna derecha: preview dinámica ── */}
             <aside className="nc-preview-panel">
               <p className="nc-preview-label">Vista previa</p>
               <div className={`nc-preview ${selectedStyle?.previewClass ?? ''}`}>
                 <div className="nc-preview-to">
-                  Para: <strong>{form.to || 'alguien especial...'}</strong>
+                  Para: <strong>{previewTo}</strong>
                 </div>
                 <div className="nc-preview-message">
                   {form.message || 'Tu mensaje aparecerá aquí mientras escribes.'}
                 </div>
                 <div className="nc-preview-from">
-                  — {form.from || 'Anónimo/a ✨'}
+                  — {form.isAnonymous ? 'Anónimo/a ✨' : (userData?.firstName || 'Tu admirador/a secret@')}
                 </div>
               </div>
             </aside>

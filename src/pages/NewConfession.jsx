@@ -121,6 +121,7 @@ export function NewConfession() {
 
       await addDoc(collection(db, 'declarations'), {
         authorId: user.uid,
+        authorName: userData?.firstName || userData?.username || 'Usuario',
         recipientId: form.toId === 'OTRO' ? null : form.toId,
         recipientName,
         isPublic: form.isPublic,

@@ -29,8 +29,8 @@ export function Feed() {
       // Ordenar localmente por fecha de creación (de más reciente a más antigua)
       // para evitar el error de requerir un índice compuesto de Firestore por defecto.
       data.sort((a, b) => {
-        const timeA = a.createdAt?.toMillis() || 0
-        const timeB = b.createdAt?.toMillis() || 0
+        const timeA = a.createdAt?.toMillis() || Date.now()
+        const timeB = b.createdAt?.toMillis() || Date.now()
         return timeB - timeA
       })
 
@@ -87,7 +87,7 @@ export function Feed() {
                     {confession.body}
                   </div>
                   <div className="nc-preview-from">
-                    — {confession.isAnonymous ? 'Anónimo/a ✨' : 'Tu admirador/a secret@'}
+                    — {confession.isAnonymous ? 'Anónimo/a ✨' : (confession.authorName || 'Usuario')}
                   </div>
                 </div>
               ))}

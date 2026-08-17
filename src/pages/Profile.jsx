@@ -28,7 +28,9 @@ export function Profile() {
   const [sentCount, setSentCount] = useState(0)
   const [receivedCount, setReceivedCount] = useState(0)
   const [myConfessions, setMyConfessions] = useState([])
+  const [receivedConfessions, setReceivedConfessions] = useState([])
   const [loading, setLoading] = useState(true)
+  const [activeTab, setActiveTab] = useState('sent') // 'sent' | 'received'
 
   // Edit state
   const [editingId, setEditingId] = useState(null)
@@ -68,7 +70,20 @@ export function Profile() {
         // Fetch declaraciones recibidas (donde recipientId === user.uid)
         const receivedQuery = query(collection(db, 'declarations'), where('recipientId', '==', user.uid))
         const receivedSnapshot = await getDocs(receivedQuery)
-        setReceivedCount(receivedSnapshot.docs.length)
+        
+        const receivedData = receivedSnapshot.docs.map(document => ({
+          id: document.id,
+          ...document.data()
+        }))
+
+        receivedData.sort((a, b) => {
+          const timeA = a.createdAt?.toMillis() || Date.now()
+          const timeB = b.createdAt?.toMillis() || Date.now()
+          return timeB - timeA
+        })
+
+        setReceivedCount(receivedData.length)
+        setReceivedConfessions(receivedData)
 
       } catch (error) {
         console.error("Error loading profile data:", error)
@@ -155,76 +170,125 @@ export function Profile() {
       </div>
 
       <section className="profile-list-section">
-        <div className="profile-list-header">
-          <h3>Mis Confesiones</h3>
+        <div className="profile-tabs" style={{ display: 'flex', gap: '1rem', marginBottom: 'var(--space-xl)', borderBottom: '1px solid var(--color-border-soft)' }}>
+          <button 
+            onClick={() => setActiveTab('sent')}
+            style={{ 
+              background: 'none', border: 'none', padding: '0.5rem 1rem', cursor: 'pointer',
+              fontSize: '1rem', fontWeight: '600',
+              color: activeTab === 'sent' ? 'var(--color-primary)' : 'var(--color-text-secondary)',
+              borderBottom: activeTab === 'sent' ? '2px solid var(--color-primary)' : '2px solid transparent'
+            }}
+          >
+            Mis Confesiones (Enviadas)
+          </button>
+          <button 
+            onClick={() => setActiveTab('received')}
+            style={{ 
+              background: 'none', border: 'none', padding: '0.5rem 1rem', cursor: 'pointer',
+              fontSize: '1rem', fontWeight: '600',
+              color: activeTab === 'received' ? 'var(--color-primary)' : 'var(--color-text-secondary)',
+              borderBottom: activeTab === 'received' ? '2px solid var(--color-primary)' : '2px solid transparent'
+            }}
+          >
+            Confesiones Recibidas
+          </button>
         </div>
 
-        {myConfessions.length === 0 ? (
-          <div className="feed-empty-state" style={{ padding: '3rem', textAlign: 'center', border: '1px dashed var(--color-border-soft)', borderRadius: 'var(--radius-lg)' }}>
-            <p style={{ margin: 0 }}>No has enviado ninguna confesión todavía.</p>
-          </div>
-        ) : (
-          <div className="profile-grid">
-            {myConfessions.map(conf => (
-              <div key={conf.id} className="profile-card">
-                <div className="profile-card-header">
-                  <span>Para: <strong>{conf.recipientName || 'Alguien'}</strong></span>
-                  <span>{conf.createdAt?.toDate().toLocaleDateString() || 'Reciente'}</span>
-                </div>
-                
-                {editingId === conf.id ? (
-                  <div className="profile-edit-form">
-                    <textarea 
-                      className="profile-edit-textarea" 
-                      rows={4}
-                      value={editBody}
-                      onChange={(e) => setEditBody(e.target.value)}
-                    />
-                    <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9rem', cursor: 'pointer' }}>
-                      <input 
-                        type="checkbox" 
-                        checked={editIsPublic} 
-                        onChange={(e) => setEditIsPublic(e.target.checked)}
-                      />
-                      Hacer pública
-                    </label>
-                    <div className="profile-edit-actions">
-                      <Button variant="outline" size="sm" onClick={cancelEditing}>Cancelar</Button>
-                      <Button variant="primary" size="sm" onClick={() => saveEditing(conf.id)}>Guardar</Button>
+        {activeTab === 'sent' && (
+          <>
+            {myConfessions.length === 0 ? (
+              <div className="feed-empty-state" style={{ padding: '3rem', textAlign: 'center', border: '1px dashed var(--color-border-soft)', borderRadius: 'var(--radius-lg)' }}>
+                <p style={{ margin: 0 }}>No has enviado ninguna confesión todavía.</p>
+              </div>
+            ) : (
+              <div className="profile-grid">
+                {myConfessions.map(conf => (
+                  <div key={conf.id} className="profile-card">
+                    <div className="profile-card-header">
+                      <span>Para: <strong>{conf.recipientName || 'Alguien'}</strong></span>
+                      <span>{conf.createdAt?.toDate().toLocaleDateString() || 'Reciente'}</span>
                     </div>
+                    
+                    {editingId === conf.id ? (
+                      <div className="profile-edit-form">
+                        <textarea 
+                          className="profile-edit-textarea" 
+                          rows={4}
+                          value={editBody}
+                          onChange={(e) => setEditBody(e.target.value)}
+                        />
+                        <label style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9rem', cursor: 'pointer' }}>
+                          <input 
+                            type="checkbox" 
+                            checked={editIsPublic} 
+                            onChange={(e) => setEditIsPublic(e.target.checked)}
+                          />
+                          Hacer pública
+                        </label>
+                        <div className="profile-edit-actions">
+                          <Button variant="outline" size="sm" onClick={cancelEditing}>Cancelar</Button>
+                          <Button variant="primary" size="sm" onClick={() => saveEditing(conf.id)}>Guardar</Button>
+                        </div>
+                      </div>
+                    ) : (
+                      <>
+                        <div className="profile-card-body">
+                          {conf.body}
+                        </div>
+                        <div style={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)', marginTop: '0.5rem' }}>
+                          Privacidad: {conf.isPublic ? 'Pública 🌎' : 'Privada 🔒'}
+                        </div>
+                        <div className="profile-card-actions">
+                          <button 
+                            className="profile-btn-icon" 
+                            onClick={() => startEditing(conf)}
+                            title="Editar"
+                            aria-label="Editar"
+                          >
+                            <EditIcon />
+                          </button>
+                          <button 
+                            className="profile-btn-icon" 
+                            onClick={() => handleDelete(conf.id)}
+                            style={{ color: '#ef4444' }}
+                            title="Eliminar"
+                            aria-label="Eliminar"
+                          >
+                            <TrashIcon />
+                          </button>
+                        </div>
+                      </>
+                    )}
                   </div>
-                ) : (
-                  <>
+                ))}
+              </div>
+            )}
+          </>
+        )}
+
+        {activeTab === 'received' && (
+          <>
+            {receivedConfessions.length === 0 ? (
+              <div className="feed-empty-state" style={{ padding: '3rem', textAlign: 'center', border: '1px dashed var(--color-border-soft)', borderRadius: 'var(--radius-lg)' }}>
+                <p style={{ margin: 0 }}>Nadie te ha confesado su crush todavía. 💔</p>
+              </div>
+            ) : (
+              <div className="profile-grid">
+                {receivedConfessions.map(conf => (
+                  <div key={conf.id} className="profile-card">
+                    <div className="profile-card-header">
+                      <span>De: <strong>{conf.isAnonymous ? 'Anónimo' : (conf.authorName || 'Usuario')}</strong></span>
+                      <span>{conf.createdAt?.toDate().toLocaleDateString() || 'Reciente'}</span>
+                    </div>
                     <div className="profile-card-body">
                       {conf.body}
                     </div>
-                    <div style={{ fontSize: '0.8rem', color: 'var(--color-text-secondary)', marginTop: '0.5rem' }}>
-                      Privacidad: {conf.isPublic ? 'Pública 🌎' : 'Privada 🔒'}
-                    </div>
-                    <div className="profile-card-actions">
-                      <button 
-                        className="profile-btn-icon" 
-                        onClick={() => startEditing(conf)}
-                        title="Editar"
-                        aria-label="Editar"
-                      >
-                        <EditIcon />
-                      </button>
-                      <button 
-                        className="profile-btn-icon" 
-                        onClick={() => handleDelete(conf.id)}
-                        style={{ color: '#ef4444' }}
-                        title="Eliminar"
-                        aria-label="Eliminar"
-                      >
-                        <TrashIcon />
-                      </button>
-                    </div>
-                  </>
-                )}
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            )}
+          </>
         )}
       </section>
     </div>

@@ -1,0 +1,80 @@
+.love-alarm-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-secondary);
+  border-radius: 50%;
+  position: relative;
+  transition: color 0.2s ease, transform 0.2s ease;
+  outline: none;
+}
+
+.love-alarm-btn:hover {
+  color: var(--color-primary);
+  background-color: var(--color-surface-hover, rgba(0,0,0,0.05));
+}
+
+.love-alarm-btn.ringing {
+  color: var(--color-primary); /* Use brand accent color */
+  animation: heartbeat 1.5s infinite;
+}
+
+/* Make the SVG filled when ringing */
+.love-alarm-btn.ringing svg {
+  fill: var(--color-primary);
+  stroke: var(--color-primary);
+}
+
+@keyframes heartbeat {
+  0% { transform: scale(1); }
+  14% { transform: scale(1.25); }
+  28% { transform: scale(1); }
+  42% { transform: scale(1.25); }
+  70% { transform: scale(1); }
+  100% { transform: scale(1); }
+}
+
+.love-alarm-indicator {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 8px;
+  height: 8px;
+  background-color: var(--color-primary);
+  border-radius: 50%;
+  border: 2px solid var(--color-background);
+}
+
+/* Explosion Animation Styles */
+.love-explosion-container {
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+.love-spark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 1;
+  animation: spark-explode 0.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+}
+
+@keyframes spark-explode {
+  0% {
+    transform: translate(-50%, -50%) scale(0) rotate(0deg);
+    opacity: 1;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(1.5) rotate(45deg);
+    opacity: 0;
+  }
+}

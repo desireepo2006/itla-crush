@@ -6,6 +6,7 @@
  */
 import { Link } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
+import { LoveAlarm } from '../LoveAlarm'
 import './Layout.css'
 
 export function Layout({ children }) {
@@ -25,9 +26,12 @@ export function Layout({ children }) {
             
             {user ? (
               <>
-                <Link to="/perfil" className="layout-nav-link" style={{ fontWeight: '600', color: 'var(--color-primary)' }}>
-                  Hola, {userData?.firstName || 'Usuario'}
-                </Link>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.25rem' }}>
+                  <LoveAlarm />
+                  <Link to="/perfil" className="layout-nav-link" style={{ fontWeight: '600', color: 'var(--color-primary)' }}>
+                    Hola, {userData?.firstName || 'Usuario'}
+                  </Link>
+                </div>
                 <button 
                   onClick={logout} 
                   className="layout-nav-link" 

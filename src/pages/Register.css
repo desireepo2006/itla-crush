@@ -1,0 +1,161 @@
+/* Register — ITLA Crush
+   Estilos usando exclusivamente tokens del design system.
+   No modifica ninguna variable o regla global. */
+
+/* ── Hero ── */
+.reg-hero {
+  padding: var(--space-2xl) 0 var(--space-xl);
+  border-bottom: 1px solid var(--color-border-soft);
+}
+
+.reg-hero-title {
+  margin-top: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+
+.reg-hero-subtitle {
+  font-size: 1.0625rem;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+/* ── Body ── */
+.reg-body {
+  padding: var(--space-2xl) 0 var(--space-3xl);
+}
+
+/* ── Card contenedor — centrado y con ancho máximo ── */
+.reg-card {
+  max-width: 540px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ── Form ── */
+.reg-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+/* ── Row: dos columnas para nombre/apellido ── */
+.reg-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-md);
+}
+
+@media (min-width: 480px) {
+  .reg-row {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ── Field ── */
+.reg-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+/* ── Label ── */
+.reg-label {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.reg-required {
+  color: var(--color-accent);
+  margin-left: 2px;
+}
+
+/* ── Input ── */
+.reg-input {
+  width: 100%;
+  padding: 0.625rem var(--space-md);
+  border: 1px solid var(--color-border-soft);
+  border-radius: var(--radius-md);
+  font-family: inherit;
+  font-size: 0.9375rem;
+  color: var(--color-text);
+  background-color: var(--color-background);
+  transition: border-color var(--transition-fast),
+              box-shadow var(--transition-fast);
+}
+
+.reg-input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-light);
+}
+
+.reg-input::placeholder {
+  color: var(--color-text-secondary);
+}
+
+.reg-input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ── Username con prefijo @ ── */
+.reg-input-prefix-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.reg-input-prefix {
+  position: absolute;
+  left: var(--space-md);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  pointer-events: none;
+  user-select: none;
+}
+
+.reg-input--prefixed {
+  padding-left: calc(var(--space-md) + 1rem);
+}
+
+/* ── Hint ── */
+.reg-hint {
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary);
+}
+
+/* ── Error banner ── */
+.reg-error {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-md);
+  background-color: var(--color-accent-light);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-md);
+  font-size: 0.9375rem;
+  color: var(--color-accent);
+  font-weight: 500;
+}
+
+/* ── Submit ── */
+.reg-submit {
+  width: 100%;
+  margin-top: var(--space-sm);
+}
+
+.reg-submit:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ── Login link ── */
+.reg-login-link {
+  font-size: 0.9rem;
+  text-align: center;
+  color: var(--color-text-secondary);
+  margin: 0;
+}

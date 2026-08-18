@@ -2,17 +2,28 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { Layout } from './components/layout/Layout'
 import { Home } from './pages/Home'
 import { Feed } from './pages/Feed'
+import { NewConfession } from './pages/NewConfession'
+import { Register } from './pages/Register'
+import { Login } from './pages/Login'
+import { Profile } from './pages/Profile'
+import { AuthProvider } from './context/AuthContext'
 
 function App() {
   return (
-    <BrowserRouter>
-      <Layout>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/feed" element={<Feed />} />
-        </Routes>
-      </Layout>
-    </BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
+        <Layout>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/feed" element={<Feed />} />
+            <Route path="/nueva" element={<NewConfession />} />
+            <Route path="/registro" element={<Register />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/perfil" element={<Profile />} />
+          </Routes>
+        </Layout>
+      </BrowserRouter>
+    </AuthProvider>
   )
 }
 

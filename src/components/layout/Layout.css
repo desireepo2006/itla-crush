@@ -35,18 +35,30 @@
   color: var(--color-text);
 }
 
-.layout-logo-heart {
-  font-size: 1.25rem;
-  line-height: 1;
+.layout-logo-img {
+  width: 7rem;
+  height: 7rem;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 
 .layout-logo-text {
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem;
   font-size: 1.25rem;
-  font-weight: 700;
   letter-spacing: -0.02em;
+  line-height: 1;
+  margin-left: -1.5rem;
+}
+
+.layout-logo-itla {
+  font-weight: 700;
+  color: var(--color-text);
 }
 
 .layout-logo-crush {
+  font-weight: 400;
   color: var(--color-accent);
 }
 
@@ -113,4 +125,27 @@
 
 .layout-nav-link:hover {
   color: var(--color-text);
+}
+
+/* ── Header CTA — Link destacado ── */
+.layout-nav-cta {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text-inverse);
+  background-color: var(--color-accent);
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-md);
+  padding: 0.3125rem 0.875rem;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color var(--transition-fast),
+              transform var(--transition-fast);
+}
+
+.layout-nav-cta:hover {
+  background-color: var(--color-accent-soft);
+  color: var(--color-text-inverse);
+  transform: translateY(-1px);
 }

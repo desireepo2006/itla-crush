@@ -1,19 +1,63 @@
 /**
- * Home — Design System Demo
+ * Home — ITLA Crush
  *
- * Showcases the visual direction of ITLA Crush and details the project status and roadmap.
+ * Página principal con video de fondo y Feed de confesiones.
  */
+import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { collection, query, orderBy, onSnapshot } from 'firebase/firestore'
+import { Lock } from 'lucide-react'
+import { db } from '../config/firebase'
+import { useAuth } from '../context/AuthContext'
 import { Button } from '../components/ui/Button'
-import { Card } from '../components/ui/Card'
 import './Home.css'
+import '../pages/NewConfession.css' // Importamos los estilos visuales de las cartas
 
 export function Home() {
+  const { user } = useAuth()
+  const [confessions, setConfessions] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    // Escuchar todas las confesiones ordenadas por fecha descendente
+    const q = query(
+      collection(db, 'declarations'),
+      orderBy('createdAt', 'desc')
+    )
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const data = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }))
+      setConfessions(data)
+      setLoading(false)
+    }, (error) => {
+      console.error("Error fetching confessions:", error)
+      setLoading(false)
+    })
+
+    return () => unsubscribe()
+  }, [])
+
   return (
     <div className="home">
       {/* ── Hero ── */}
       <section className="home-hero">
-        <div className="container">
-          <span className="home-hero-icon" aria-hidden="true">💌</span>
+        {/* Fondo de video — nítido, sin blur */}
+        <video
+          className="home-hero-video"
+          src="/assets/hero-video.mp4"
+          autoPlay
+          loop
+          muted
+          playsInline
+        />
+        {/* Overlay sutil para dar contraste al texto sin desenfoque */}
+        <div className="home-hero-overlay" aria-hidden="true" />
+
+        {/* Contenido sobre el video */}
+        <div className="home-hero-content container">
           <h1 className="home-hero-title">
             Donde los crushes{' '}
             <span className="home-hero-highlight">dejan de ser secretos.</span>
@@ -22,130 +66,127 @@ export function Home() {
             Una red social de confesiones románticas para estudiantes del ITLA.
           </p>
           <div className="home-hero-actions">
-            <Button variant="primary" size="lg">Comenzar</Button>
-            <Button variant="outline" size="lg">Explorar</Button>
+            <Link to="/nueva">
+              <Button variant="primary" size="lg">Confesarte ❤️</Button>
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* ── Bento Demo ── */}
-      <section className="home-bento-section">
+      {/* ── Feed Principal ── */}
+      <section className="feed-content" style={{ padding: 'var(--space-3xl) 0' }}>
         <div className="container">
-          <div className="home-section-header">
-            <span className="badge badge-accent">✨ Design System</span>
-            <h2>Vista previa del sistema visual</h2>
+          <div className="home-section-header" style={{ marginBottom: 'var(--space-2xl)', textAlign: 'center' }}>
+            <span className="badge badge-accent">💌 En vivo</span>
+            <h2>Últimas Confesiones</h2>
           </div>
 
-          <div className="bento-grid">
-            {/* Card: Default */}
-            <Card>
-              <h3>Declaraciones</h3>
-              <p>
-                Escribe lo que sientes. Elige si quieres que sea público o privado,
-                anónimo o con tu nombre.
+          {loading ? (
+            <div className="feed-empty-state" style={{ textAlign: 'center', padding: '3rem' }}>
+              <p className="feed-empty-text">Cargando confesiones...</p>
+            </div>
+          ) : confessions.length === 0 ? (
+            <div className="feed-empty-state" style={{ 
+              display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', 
+              gap: '1rem', padding: '4rem 2rem', border: '1px dashed var(--color-border-soft)', 
+              borderRadius: 'var(--radius-lg)', textAlign: 'center', backgroundColor: 'var(--color-surface)' 
+            }}>
+              <span aria-hidden="true" style={{ fontSize: '3rem' }}>👀</span>
+              <p className="feed-empty-text" style={{ fontSize: '1.25rem', fontWeight: 'bold', margin: 0 }}>
+                Todavía nadie se ha atrevido a confesar su crush
               </p>
-              <Button variant="primary" size="sm">Escribir ❤️</Button>
-            </Card>
-
-            {/* Card: Paper — spans 2 cols on tablet+ */}
-            <Card variant="paper" className="bento-span-2">
-              <h3>📋 Estilo Cuaderno</h3>
-              <p>
-                Las declaraciones pueden verse como páginas de cuaderno, post-its,
-                cartas o notas. Cada estilo tiene su propia personalidad.
+              <p style={{ color: 'var(--color-text-secondary)', margin: 0 }}>
+                ¡Sé el primero en romper el hielo!
               </p>
-              <div className="home-paper-preview notebook-lines">
-                <p className="home-paper-text">
-                  &ldquo;Desde que te vi en el laboratorio no dejo de pensar en ti...&rdquo;
-                </p>
-              </div>
-            </Card>
+            </div>
+          ) : (
+            <div className="feed-grid" style={{ 
+              display: 'grid', 
+              gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', 
+              gap: 'var(--space-xl)' 
+            }}>
+              {confessions.map((conf) => {
+                const isPrivate = conf.isPublic === false
+                const isLocked = !user && isPrivate
+                
+                // Texto falso para ofuscar el DOM si está bloqueado
+                const displayBody = isLocked 
+                  ? "Este contenido es privado. Para mantener el secreto a salvo, hemos ocultado este mensaje de los visitantes no registrados. Lorem ipsum dolor sit amet, consectetur adipiscing elit."
+                  : conf.body
 
-            {/* Card: Note — notebook lines */}
-            <Card variant="note">
-              <div className="home-note-content notebook-holes">
-                <small className="home-note-label">Nota de cuaderno</small>
-                <p className="home-note-text font-arial">
-                  [Arial] Las notas de cuaderno incluyen líneas azules y agujeros
-                  laterales como un cuaderno real. Esta es una declaración larga
-                  para comprobar que el texto se mantiene perfectamente alineado
-                  con las líneas sin importar cuántas líneas ocupe el párrafo.
-                </p>
-                <p className="home-note-text font-comic">
-                  [Comic Sans] Incluso con una fuente diferente, la variable de offset
-                  ajusta la línea base para que el texto siga apoyado en la guía.
-                </p>
-                <p className="home-note-text font-times">
-                  [Times New Roman] Todo se mantiene en su lugar gracias a la
-                  única fuente de verdad: la variable CSS de line-height.
-                </p>
-              </div>
-            </Card>
+                const authorDisplay = conf.isAnonymous ? 'Anónimo' : (conf.authorName || 'Usuario')
+                const recipientDisplay = conf.recipientName || 'alguien'
 
-            {/* Card: Love Alarm */}
-            <Card>
-              <div className="home-alarm-header">
-                <span className="home-alarm-icon" aria-hidden="true">❤️</span>
-                <h3>Love Alarm</h3>
-              </div>
-              <p>
-                Tu enamorado/a anónimo/a está más cerca de lo que crees...
-              </p>
-              <span className="badge badge-accent">Próximamente</span>
-            </Card>
+                // Estilos para el texto desenfocado
+                const blurredStyle = isLocked ? {
+                  filter: 'blur(6px)',
+                  userSelect: 'none',
+                  pointerEvents: 'none'
+                } : {}
 
-            {/* Card: Status & Roadmap (Merged from develop) */}
-            <Card variant="paper">
-              <span className="badge badge-primary">Fase 2: Configuración</span>
-              <h3 className="home-roadmap-title">Estado del Proyecto</h3>
-              <p className="home-roadmap-description">
-                El entorno frontend del proyecto está preparado. La arquitectura base,
-                estilos globales y la integración inicial con ESLint se han configurado correctamente.
-              </p>
-              <h4 className="home-roadmap-subtitle">Próximos Pasos:</h4>
-              <ul className="home-roadmap-list">
-                <li>Configuración de Firebase & Auth</li>
-                <li>Sistema de Declaraciones de Amor</li>
-                <li>Personalización Visual de Publicaciones</li>
-                <li>Detección de Proximidad (ITLA Love Alarm)</li>
-              </ul>
-            </Card>
+                return (
+                  <div 
+                    key={conf.id} 
+                    className={`nc-preview nc-preview--${conf.backgroundStyle || 'notebook'} feed-card`}
+                    style={{ position: 'relative', overflow: 'hidden', height: '100%' }}
+                  >
+                    <div className="nc-preview-to" style={blurredStyle}>
+                      Para: <strong>{isLocked ? '**********' : recipientDisplay}</strong>
+                    </div>
+                    
+                    <div className="nc-preview-message" style={{ 
+                      whiteSpace: 'pre-wrap', 
+                      fontFamily: conf.font === 'default' ? 'inherit' : conf.font,
+                      ...blurredStyle
+                    }}>
+                      {displayBody}
+                    </div>
+                    
+                    <div className="nc-preview-from" style={blurredStyle}>
+                      — {isLocked ? '**********' : authorDisplay}
+                    </div>
 
-            {/* Card: Stats preview */}
-            <Card variant="paper">
-              <h3>Tu perfil</h3>
-              <div className="home-stats">
-                <div className="home-stat">
-                  <span className="home-stat-number">0</span>
-                  <span className="home-stat-label">Declaraciones</span>
-                </div>
-                <div className="home-stat">
-                  <span className="home-stat-number">0</span>
-                  <span className="home-stat-label">Recibidas</span>
-                </div>
-                <div className="home-stat">
-                  <span className="home-stat-number">—</span>
-                  <span className="home-stat-label">Love Alarm</span>
-                </div>
-              </div>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Buttons Demo ── */}
-      <section className="home-buttons-section">
-        <div className="container">
-          <div className="home-section-header">
-            <h2>Botones</h2>
-          </div>
-          <div className="home-buttons-demo">
-            <Button variant="primary" size="sm">Primary SM</Button>
-            <Button variant="primary">Primary MD</Button>
-            <Button variant="primary" size="lg">Primary LG</Button>
-            <Button variant="outline">Outline</Button>
-            <Button variant="accent">Accent ❤️</Button>
-          </div>
+                    {isLocked && (
+                      <div style={{
+                        position: 'absolute',
+                        inset: 0,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        zIndex: 10,
+                        backgroundColor: 'rgba(255, 255, 255, 0.4)',
+                      }}>
+                        <div style={{ 
+                          backgroundColor: 'var(--color-surface)', 
+                          padding: '1.5rem', 
+                          borderRadius: 'var(--radius-lg)',
+                          display: 'flex',
+                          flexDirection: 'column',
+                          alignItems: 'center',
+                          boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
+                        }}>
+                          <Lock size={32} style={{ marginBottom: '8px' }} aria-hidden="true" />
+                          <Link to="/login" style={{ 
+                            textDecoration: 'none', 
+                            fontWeight: '600', 
+                            color: 'var(--color-text)',
+                            border: '1px solid var(--color-border)',
+                            padding: '0.5rem 1rem',
+                            borderRadius: 'var(--radius-md)',
+                            marginTop: '0.5rem',
+                            fontSize: '0.9rem'
+                          }}>
+                            Inicia sesión para ver
+                          </Link>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )
+              })}
+            </div>
+          )}
         </div>
       </section>
     </div>

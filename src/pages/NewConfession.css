@@ -1,0 +1,344 @@
+/* NewConfession — ITLA Crush
+   Estilos usando exclusivamente tokens del design system.
+   No modifica ninguna variable o regla global existente. */
+
+/* ── Hero ── */
+.nc-hero {
+  padding: var(--space-2xl) 0 var(--space-xl);
+  border-bottom: 1px solid var(--color-border-soft);
+}
+
+.nc-hero-title {
+  margin-top: var(--space-sm);
+  margin-bottom: var(--space-sm);
+}
+
+.nc-hero-subtitle {
+  font-size: 1.0625rem;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+/* ── Body ── */
+.nc-body {
+  padding: var(--space-2xl) 0 var(--space-3xl);
+}
+
+/* ── Two-column layout ── */
+.nc-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-2xl);
+  align-items: start;
+}
+
+@media (min-width: 768px) {
+  .nc-layout {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* ── Form ── */
+.nc-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+/* ── Field ── */
+.nc-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+
+.nc-label {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.nc-label-required {
+  color: var(--color-accent);
+  margin-left: 2px;
+}
+
+.nc-label-optional {
+  font-size: 0.8125rem;
+  font-weight: 400;
+  color: var(--color-text-secondary);
+  margin-left: var(--space-xs);
+}
+
+.nc-input,
+.nc-textarea {
+  width: 100%;
+  padding: 0.625rem var(--space-md);
+  border: 1px solid var(--color-border-soft);
+  border-radius: var(--radius-md);
+  font-family: inherit;
+  font-size: 0.9375rem;
+  color: var(--color-text);
+  background-color: var(--color-background);
+  transition: border-color var(--transition-fast),
+              box-shadow var(--transition-fast);
+}
+
+.nc-input:focus,
+.nc-textarea:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px var(--color-primary-light);
+}
+
+.nc-input::placeholder,
+.nc-textarea::placeholder {
+  color: var(--color-text-secondary);
+}
+
+.nc-textarea {
+  resize: vertical;
+  min-height: 140px;
+  line-height: 1.6;
+}
+
+.nc-char-count {
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary);
+  text-align: right;
+}
+
+/* ── Style Selector ── */
+.nc-style-fieldset {
+  border: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.nc-style-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-sm);
+}
+
+.nc-style-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: var(--space-md) var(--space-sm);
+  border: 1px solid var(--color-border-soft);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  text-align: center;
+  transition: border-color var(--transition-fast),
+              background-color var(--transition-fast),
+              box-shadow var(--transition-fast);
+  background-color: var(--color-background);
+}
+
+.nc-style-option:hover {
+  border-color: var(--color-primary);
+  background-color: var(--color-primary-light);
+}
+
+.nc-style-option--active {
+  border-color: var(--color-accent);
+  background-color: var(--color-accent-light);
+  box-shadow: 0 0 0 2px var(--color-accent);
+}
+
+/* Hide the native radio visually — kept accessible */
+.nc-style-radio {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.nc-style-icon {
+  font-size: 1.75rem;
+  line-height: 1;
+}
+
+.nc-style-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-text);
+}
+
+.nc-style-desc {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+  line-height: 1.3;
+}
+
+/* ── Actions ── */
+.nc-actions {
+  padding-top: var(--space-sm);
+}
+
+.nc-submit {
+  width: 100%;
+}
+
+/* ── Preview Panel ── */
+.nc-preview-panel {
+  position: sticky;
+  top: calc(var(--header-height) + var(--space-lg));
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.nc-preview-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+/* ── Preview base ── */
+.nc-preview {
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  min-height: 280px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+  transition: background-color var(--transition-base),
+              border-color var(--transition-base),
+              transform var(--transition-base),
+              box-shadow var(--transition-base);
+}
+
+.nc-preview-to {
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary);
+}
+
+.nc-preview-to strong {
+  color: var(--color-primary);
+  font-weight: 700;
+}
+
+.nc-preview-message {
+  flex: 1;
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: var(--color-text);
+  white-space: pre-line;
+  word-break: break-word;
+}
+
+.nc-preview-from {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  font-style: italic;
+  text-align: right;
+}
+
+/* ─────────────────────────────────────────
+   PREVIEW THEMES — los 4 estilos de carta
+   ───────────────────────────────────────── */
+
+/* Estilo 1 — Cuaderno */
+.nc-preview--notebook {
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border-soft);
+  position: relative;
+  background-image: repeating-linear-gradient(
+    transparent,
+    transparent calc(var(--notebook-line-height) - 1px),
+    var(--color-border-notebook) calc(var(--notebook-line-height) - 1px),
+    var(--color-border-notebook) var(--notebook-line-height)
+  );
+  background-size: 100% var(--notebook-line-height);
+  background-position: 0 calc(var(--notebook-padding-top) + 8px);
+}
+
+/* Margen rojo izquierdo del cuaderno */
+.nc-preview--notebook::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 40px;
+  width: 1px;
+  background-color: var(--color-accent);
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.nc-preview--notebook .nc-preview-message {
+  font-family: Arial, sans-serif;
+  padding-left: var(--space-lg);
+}
+
+/* Estilo 2 — Post Normal */
+.nc-preview--post {
+  background-color: var(--color-paper);
+  border: 1px solid var(--color-border-soft);
+  box-shadow: var(--shadow-md);
+}
+
+/* Estilo 3 — Post-it */
+.nc-preview--postit {
+  background-color: #FFF9C4;
+  border: 1px solid #F0E040;
+  box-shadow: 3px 3px 8px rgba(0, 0, 0, 0.15);
+  transform: rotate(-1deg);
+  position: relative;
+}
+
+/* Tachuela del post-it */
+.nc-preview--postit::before {
+  content: '📌';
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.25rem;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,0.2));
+}
+
+.nc-preview--postit .nc-preview-message {
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+}
+
+/* Estilo 4 — Corazón */
+.nc-preview--heart {
+  background-color: var(--color-accent-light);
+  border: 2px solid var(--color-accent);
+  text-align: center;
+  align-items: center;
+}
+
+.nc-preview--heart::after {
+  content: '❤️';
+  position: absolute;
+  font-size: 5rem;
+  opacity: 0.06;
+  pointer-events: none;
+}
+
+.nc-preview--heart .nc-preview-to {
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+.nc-preview--heart .nc-preview-message {
+  color: var(--color-accent);
+  font-weight: 500;
+  font-style: italic;
+}
+
+.nc-preview--heart .nc-preview-from {
+  color: var(--color-accent-soft);
+}

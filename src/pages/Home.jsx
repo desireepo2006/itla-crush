@@ -6,29 +6,12 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { collection, query, orderBy, onSnapshot } from 'firebase/firestore'
+import { Lock } from 'lucide-react'
 import { db } from '../config/firebase'
 import { useAuth } from '../context/AuthContext'
 import { Button } from '../components/ui/Button'
 import './Home.css'
 import '../pages/NewConfession.css' // Importamos los estilos visuales de las cartas
-
-// Ícono SVG de candado minimalista para el Gated Content
-const LockIcon = () => (
-  <svg 
-    width="32" 
-    height="32" 
-    viewBox="0 0 24 24" 
-    fill="none" 
-    stroke="currentColor" 
-    strokeWidth="2" 
-    strokeLinecap="round" 
-    strokeLinejoin="round" 
-    style={{ marginBottom: '8px' }}
-  >
-    <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-    <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-  </svg>
-)
 
 export function Home() {
   const { user } = useAuth()
@@ -183,7 +166,7 @@ export function Home() {
                           alignItems: 'center',
                           boxShadow: '0 4px 20px rgba(0,0,0,0.1)'
                         }}>
-                          <LockIcon />
+                          <Lock size={32} style={{ marginBottom: '8px' }} aria-hidden="true" />
                           <Link to="/login" style={{ 
                             textDecoration: 'none', 
                             fontWeight: '600', 

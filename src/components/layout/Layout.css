@@ -35,18 +35,30 @@
   color: var(--color-text);
 }
 
-.layout-logo-heart {
-  font-size: 1.25rem;
-  line-height: 1;
+.layout-logo-img {
+  width: 7rem;
+  height: 7rem;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 
 .layout-logo-text {
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem;
   font-size: 1.25rem;
-  font-weight: 700;
   letter-spacing: -0.02em;
+  line-height: 1;
+  margin-left: -1.5rem;
+}
+
+.layout-logo-itla {
+  font-weight: 700;
+  color: var(--color-text);
 }
 
 .layout-logo-crush {
+  font-weight: 400;
   color: var(--color-accent);
 }
 

@@ -5,6 +5,7 @@
  */
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { Eye, EyeOff } from 'lucide-react'
 import { loginUser } from '../services/auth'
 import './Register.css' // Reutilizando clases del sistema de diseño actual
 
@@ -117,13 +118,14 @@ export function Login() {
                       background: 'none',
                       border: 'none',
                       cursor: 'pointer',
-                      fontSize: '1.2rem',
                       padding: 0,
+                      display: 'flex',
+                      alignItems: 'center',
                       color: 'var(--color-text-muted)'
                     }}
                     aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
                   >
-                    {showPassword ? '🙈' : '👁️'}
+                    {showPassword ? <EyeOff size={20} aria-hidden="true" /> : <Eye size={20} aria-hidden="true" />}
                   </button>
                 </div>
               </div>

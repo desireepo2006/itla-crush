@@ -41,13 +41,20 @@
   --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 
   /* Spacing Scale */
-  --space-xs: 0.25rem;   /* 4px */
-  --space-sm: 0.5rem;    /* 8px */
-  --space-md: 1rem;      /* 16px */
-  --space-lg: 1.5rem;    /* 24px */
-  --space-xl: 2rem;      /* 32px */
-  --space-2xl: 3rem;     /* 48px */
-  --space-3xl: 4rem;     /* 64px */
+  --space-xs: 0.25rem;
+  /* 4px */
+  --space-sm: 0.5rem;
+  /* 8px */
+  --space-md: 1rem;
+  /* 16px */
+  --space-lg: 1.5rem;
+  /* 24px */
+  --space-xl: 2rem;
+  /* 32px */
+  --space-2xl: 3rem;
+  /* 48px */
+  --space-3xl: 4rem;
+  /* 64px */
 
   /* Border Radius */
   --radius-sm: 4px;
@@ -73,7 +80,8 @@
    */
   --notebook-line-height: 32px;
   --notebook-padding-top: var(--space-lg);
-  --notebook-baseline-offset: 21.5px; /* Default for sans-serif at 16px */
+  --notebook-baseline-offset: 21.5px;
+  /* Default for sans-serif at 16px */
 
   /* Force light mode */
   color-scheme: light;
@@ -114,7 +122,12 @@ body {
 }
 
 /* ── Typography ── */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-sans);
   font-weight: 700;
   line-height: 1.25;
@@ -122,15 +135,34 @@ h1, h2, h3, h4, h5, h6 {
   letter-spacing: -0.01em;
 }
 
-h1 { font-size: 2.5rem; }
-h2 { font-size: 1.75rem; }
-h3 { font-size: 1.25rem; }
-h4 { font-size: 1.125rem; }
+h1 {
+  font-size: 2.5rem;
+}
+
+h2 {
+  font-size: 1.75rem;
+}
+
+h3 {
+  font-size: 1.25rem;
+}
+
+h4 {
+  font-size: 1.125rem;
+}
 
 @media (max-width: 640px) {
-  h1 { font-size: 1.875rem; }
-  h2 { font-size: 1.375rem; }
-  h3 { font-size: 1.125rem; }
+  h1 {
+    font-size: 1.875rem;
+  }
+
+  h2 {
+    font-size: 1.375rem;
+  }
+
+  h3 {
+    font-size: 1.125rem;
+  }
 }
 
 p {
@@ -159,14 +191,20 @@ a:hover {
 }
 
 /* ── Images & Media ── */
-img, svg, picture, video {
+img,
+svg,
+picture,
+video {
   max-width: 100%;
   height: auto;
   display: block;
 }
 
 /* ── Interactive Base ── */
-button, input, select, textarea {
+button,
+input,
+select,
+textarea {
   font-family: inherit;
   font-size: inherit;
   line-height: inherit;
@@ -179,7 +217,8 @@ button, input, select, textarea {
 }
 
 /* ── Lists ── */
-ul, ol {
+ul,
+ol {
   list-style: none;
 }
 
@@ -202,8 +241,8 @@ ul, ol {
   border: 1px solid var(--color-border);
   cursor: pointer;
   transition: background-color var(--transition-fast),
-              border-color var(--transition-fast),
-              transform var(--transition-fast);
+    border-color var(--transition-fast),
+    transform var(--transition-fast);
   text-decoration: none;
   white-space: nowrap;
 }
@@ -263,7 +302,7 @@ ul, ol {
   border-radius: var(--radius-lg);
   padding: var(--space-lg);
   transition: transform var(--transition-base),
-              box-shadow var(--transition-base);
+    box-shadow var(--transition-base);
 }
 
 .card:hover {
@@ -290,6 +329,7 @@ ul, ol {
 .notebook-lines p {
   margin-bottom: var(--notebook-line-height);
 }
+
 .card-note p:last-child,
 .notebook-lines p:last-child {
   margin-bottom: 0;
@@ -306,12 +346,10 @@ ul, ol {
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: repeating-linear-gradient(
-    transparent,
-    transparent calc(var(--notebook-line-height) - 1px),
-    var(--color-border-notebook) calc(var(--notebook-line-height) - 1px),
-    var(--color-border-notebook) var(--notebook-line-height)
-  );
+  background-image: repeating-linear-gradient(transparent,
+      transparent calc(var(--notebook-line-height) - 1px),
+      var(--color-border-notebook) calc(var(--notebook-line-height) - 1px),
+      var(--color-border-notebook) var(--notebook-line-height));
   background-size: 100% var(--notebook-line-height);
   background-position: 0 calc(var(--notebook-padding-top) + var(--notebook-baseline-offset) - 1px);
   opacity: 0.35;
@@ -362,12 +400,10 @@ ul, ol {
    Uses the same --notebook-line-height variable for the gradient cycle
    and the dynamic calculation for vertical alignment. */
 .notebook-lines {
-  background-image: repeating-linear-gradient(
-    transparent,
-    transparent calc(var(--notebook-line-height) - 1px),
-    var(--color-border-notebook) calc(var(--notebook-line-height) - 1px),
-    var(--color-border-notebook) var(--notebook-line-height)
-  );
+  background-image: repeating-linear-gradient(transparent,
+      transparent calc(var(--notebook-line-height) - 1px),
+      var(--color-border-notebook) calc(var(--notebook-line-height) - 1px),
+      var(--color-border-notebook) var(--notebook-line-height));
   background-size: 100% var(--notebook-line-height);
   background-position: 0 calc(var(--notebook-padding-top) + var(--notebook-baseline-offset) - 1px);
   line-height: var(--notebook-line-height);
@@ -375,16 +411,16 @@ ul, ol {
 }
 
 /* ── Notebook Font Adjustments ── */
-   Different fonts have slightly different baseline metrics.
-   These classes centralize the sub-pixel adjustments for perfect alignment. */
-.font-arial {
+Different fonts have slightly different baseline metrics. These classes centralize the sub-pixel adjustments for perfect alignment. */ .font-arial {
   font-family: Arial, sans-serif;
   --notebook-baseline-offset: 21.5px;
 }
+
 .font-times {
   font-family: 'Times New Roman', Times, serif;
   --notebook-baseline-offset: 21.4px;
 }
+
 .font-comic {
   font-family: 'Comic Sans MS', cursive, sans-serif;
   --notebook-baseline-offset: 21.0px;
@@ -482,4 +518,3 @@ ul, ol {
   white-space: nowrap;
   border-width: 0;
 }
-

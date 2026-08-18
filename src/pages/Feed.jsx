@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react'
 import { collection, query, where, onSnapshot } from 'firebase/firestore'
 import { db } from '../config/firebase'
 import './Feed.css'
-import '../pages/NewConfession.css' // Importar los estilos visuales de las cartas
+import '../pages/NewConfession.css'
 
 export function Feed() {
   const [confessions, setConfessions] = useState([])
@@ -26,8 +26,7 @@ export function Feed() {
         ...doc.data()
       }))
       
-      // Ordenar localmente por fecha de creación (de más reciente a más antigua)
-      // para evitar el error de requerir un índice compuesto de Firestore por defecto.
+      // Ordenar localmente por fecha de creación
       data.sort((a, b) => {
         const timeA = a.createdAt?.toMillis() || Date.now()
         const timeB = b.createdAt?.toMillis() || Date.now()
@@ -41,12 +40,12 @@ export function Feed() {
       setLoading(false)
     })
 
-    // Limpiar listener al desmontar el componente
     return () => unsubscribe()
   }, [])
 
   return (
     <div className="feed">
+      {/* ── Hero ── */}
       <section className="feed-hero">
         <div className="container">
           <span className="badge badge-accent">💌 Feed Público</span>
@@ -57,6 +56,7 @@ export function Feed() {
         </div>
       </section>
 
+      {/* ── Confesiones ── */}
       <section className="feed-content">
         <div className="container">
           {loading ? (

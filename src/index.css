@@ -410,8 +410,11 @@ ol {
   padding-top: var(--notebook-padding-top);
 }
 
-/* ── Notebook Font Adjustments ── */
-Different fonts have slightly different baseline metrics. These classes centralize the sub-pixel adjustments for perfect alignment. */ .font-arial {
+/* ── Notebook Font Adjustments ── 
+   Different fonts have slightly different baseline metrics. 
+   These classes centralize the sub-pixel adjustments for perfect alignment. 
+*/
+.font-arial {
   font-family: Arial, sans-serif;
   --notebook-baseline-offset: 21.5px;
 }
